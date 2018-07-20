@@ -11,23 +11,26 @@ var query = function (sql) {
 
 var init = function () {
     var createQuesSql = `CREATE TABLE IF NOT EXISTS question_tbl(
-            question_id INT UNSIGNED AUTO_INCREMENT,
+            id INT UNSIGNED AUTO_INCREMENT,
             question_title VARCHAR(100) NOT NULL,
             question_answer VARCHAR(40) NOT NULL,
             question_type INT NOT NULL,
-            PRIMARY KEY ( question_id )
+            PRIMARY KEY ( id )
     )ENGINE=InnoDB DEFAULT CHARSET=utf8`;
     query(createQuesSql);
 
     var tbl = "user_tbl";
     var createUserSql = `CREATE TABLE IF NOT EXISTS ${tbl}(
-            user_id INT UNSIGNED AUTO_INCREMENT,
-            user_name VARCHAR(100) NOT NULL,
-            user_phone VARCHAR(40) NOT NULL,
-            question_id INT NOT NULL,
+            id INT UNSIGNED AUTO_INCREMENT,
+            user_name VARCHAR(20) NOT NULL,
+            user_sex VARCHAR(10) NOT NULL,
+            user_age INT NOT NULL,
+            user_phone VARCHAR(11) NOT NULL,
+            user_industry VARCHAR(40) NOT NULL,
             question_result VARCHAR(100),
-            submission_date DATE,
-            PRIMARY KEY ( user_id )
+            submission_date timestamp default current_timestamp,
+            PRIMARY KEY ( id ),
+            UNIQUE KEY uniq_phone ( user_phone )
     )ENGINE=InnoDB DEFAULT CHARSET=utf8`;
     query(createUserSql);
 
