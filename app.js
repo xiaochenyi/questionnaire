@@ -21,6 +21,7 @@ app.use(logFactory.connectLogger('http', {
 }));
 
 const appLogger = logFactory.getLogger('app');
+const errLogger = logFactory.getLogger('err');
 
 var init = require('./db/init');
 var koaTransaction = require('koa-mysql-transaction');
@@ -43,11 +44,15 @@ app.use(async (ctx, next) => {
 });
 
 router.get('/', async (ctx, next) => {
-    let results = await ctx.execSql('select * from question_tbl');
-    results.forEach(function (item) {
-        item.question_answer = item.question_answer.split('/');
-    })
-    ctx.body = results;
+    try{
+        let results = await ctx.execSql('select * from question_tbl1');
+        results.forEach(function (item) {
+            item.question_answer = item.question_answer.split('/');
+        })
+        ctx.body = results;
+    } catch (e) {
+        errLogger.error(e);
+    }
 });
 
 router.get('/resultList', async (ctx, next) => {
