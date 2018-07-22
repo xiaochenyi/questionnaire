@@ -1,8 +1,26 @@
 require('babel-core/register');
 
 const Koa = require('koa');
+const logFactory = require('corie-logger');
 const router = require('koa-router')();
 const app = new Koa();
+
+logFactory.configure({
+    // 日志初始化配置，可以设置文件路径或者json对象
+    conf: `${__dirname}/log4js.json`,
+    // 日志存放的目录
+    path: `${__dirname}/logs`
+});
+
+app.use(logFactory.connectLogger('http', {
+    format: `":user-agent"
+  “remote-addr”: [ :remote-addr ]
+  “request":     ":method  :url  HTTP/:http-version"
+  "response":    “:status  :response-time ms  :content-length byte”
+  "referrer":    ":referrer"`
+}));
+
+const appLogger = logFactory.getLogger('app');
 
 var init = require('./db/init');
 var koaTransaction = require('koa-mysql-transaction');
@@ -71,5 +89,5 @@ router.get('/resultList', async (ctx, next) => {
 app.use(router.routes());
 app.use(router.allowedMethods);
 app.listen(3001, ()=>{
-    console.log('starting on port 3001');
+    appLogger.info('starting on port 3001');
 });

@@ -11,7 +11,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "corie-logger": "^1.0.2",
     "ejs": "^2.6.1",
+    "glob": "^7.1.2",
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.1",
     "koa-mysql-transaction": "^1.0.1",
