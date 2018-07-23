@@ -2,12 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>调查问卷情况</title>
+    <title>结果列表</title>
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
 </head>
 <body>
 
-<% for(var i = 0; i< results.length; i++) {%>
-    <%=results[i].user_name%>
-<%}%>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    结果列表
+                </div>
+
+                <div class="table-responsive">
+                    <form>
+                        <table class="table table-bordered" id="ta">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>年龄</th>
+                                <th>联系方式</th>
+                                <th>所在行业</th>
+                                <th>回答结果</th>
+                                <th>提交时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <% for(var i=0;i< results.length ;i++){%>
+                            <tr>
+                                <td><%=results[i].id%></td>
+                                <td><%=results[i].user_name%></td>
+                                <td><%=results[i].user_sex%></td>
+                                <td><%=results[i].user_age%></td>
+                                <td><%=results[i].user_phone%></td>
+                                <td><%=results[i].user_industry%></td>
+                                <td><%=results[i].question_result%></td>
+                                <td><%=Fun.formatDateTime(results[i].submission_date)%></td>
+                            </tr>
+                            <%}%>
+
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 </body>
 </html>

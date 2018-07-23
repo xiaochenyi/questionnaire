@@ -1,5 +1,6 @@
 require('babel-core/register');
 
+const path = require('path');
 const Koa = require('koa');
 const logFactory = require('corie-logger');
 const router = require('koa-router')();
@@ -27,10 +28,13 @@ var init = require('./db/init');
 var koaTransaction = require('koa-mysql-transaction');
 
 init.init();
-app.use(koaTransaction(init.mysql, init.conf, 'single'));
+app.use(koaTransaction(init.mysql, init.conf, 'pool'));
 
 const views= require('koa-views');
 app.use(views('views',{map:{html: 'ejs'}}));
+
+const static = require('koa-static');
+app.use(static(path.join(__dirname, 'static')));
 
 const bodyParser = require('koa-bodyparser');
 app.use(bodyParser());
@@ -38,14 +42,17 @@ app.use(bodyParser());
 var cors = require('koa2-cors');
 app.use(cors());
 
+//加载自定义全局方法
+const Fun = require('./src/common/utils');
+
 app.use(async (ctx, next) => {
-    console.log(new Date());
+    ctx.state.Fun = Fun;
     await next();
 });
 
 router.get('/', async (ctx, next) => {
     try{
-        let results = await ctx.execSql('select * from question_tbl1');
+        let results = await ctx.execSql('select * from question_tbl');
         results.forEach(function (item) {
             item.question_answer = item.question_answer.split('/');
         })
